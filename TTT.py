@@ -4,7 +4,7 @@ import random
 
 ### The Start Grid as a variable 'grid'
 def Grid():
-  grid = [1, 2, 3,
+	grid = [1, 2, 3,
 			4, 5, 6,
 			7, 8, 9]
 	return grid		
@@ -90,10 +90,22 @@ def RefGrid(grid, possiblemove, move, char):
 ### PlayerMove
 def PlayerMove(grid, possiblemove):
 	Pgrid(grid)
-	move = 10
-	while int(move) not in possiblemove:
-		move = raw_input("Select a spot? " + str(possiblemove) + " ")
-	move = int(move)
+##		move = raw_input("Select a spot? " + str(possiblemove) + " ")
+##		if move != ""
+  	move = "move"
+## 	userInput = 0
+	while True:
+		try:
+			move = int(raw_input("Select a spot? " + str(possiblemove) + " "))
+		except ValueError:
+			continue
+  		else:
+  			if int(move) in possiblemove:
+  				break
+  			else:
+  				continue	 
+###  	while not move.isdigit() and (int(move) not in possiblemove):
+###  		move = raw_input("Select a spot? " + str(possiblemove) + " ")		
 	grid, possiblemove = RefGrid(grid, possiblemove, move, player)
 	return (grid, possiblemove, move)
 
@@ -115,23 +127,34 @@ def PcMove(grid, possiblemove):
 		copyGrid[i - 1]	= player
 		if CheckAll(copyGrid, player):
 			return i
-## Take the center - 5
+## Take the center - 5 
 	if 5 in leftover:
 		return 5			
 ### Take a corner - 1, 3, 7, 9
+	leftpossible = []
 	for i in [1, 3, 7, 9]:
-		leftpossible = []
 		if i in leftover:
 			leftpossible.append(i)
-		if leftpossible != []:
-			return random.choice(leftpossible)
+### in 3 move when center == pc and one corner == player remove opposite corner from 
+### left possible spots of pc's move	
+	if len(leftover) == 7 and grid[5-1] == pc:
+		if grid[1-1] == player:
+			leftpossible.remove(9)
+		if grid[9-1] == player:
+			leftpossible.remove(1)
+		if grid[3-1] == player:
+ 			leftpossible.remove(7)
+		if grid[7-1] == player:
+			leftpossible.remove(3)							
+	if leftpossible != []:
+		return random.choice(leftpossible)
 ### Take a side - 2,4,6,8
+	leftpossible =[]
 	for i in [2, 4, 6, 8]:
-		leftpossible = []
 		if i in leftover:
 			leftpossible.append(i)
-		if leftpossible != []:
-			return random.choice(leftpossible)	
+	if leftpossible != []:
+		return random.choice(leftpossible)	
 
 
 ############# Start Game ####################################
@@ -141,7 +164,7 @@ turn_player, turn_pc = 1, 0 #### turn - player starts 1st,  PC starts 2nd
 
 while True:
 	grid = Grid()
-	possiblemove = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	possiblemove = Grid()
 	win = ""
 	while len(possiblemove) > 0:
 		if turn_player == len(possiblemove) % 2:
@@ -171,6 +194,9 @@ while True:
 ############## End Game ########################################
 
 				
+
+
+
 
 
 
